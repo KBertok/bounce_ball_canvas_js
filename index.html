@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+</head>
+<body>
+    <!-- Canvas id ancho y alto -->
+    <canvas id="game_canvas" width="400" height="400"></canvas>
+    <script>
+        // Declarar variables
+        const FPS = 30;      // Frames per second.
+        var bs = 30;         // Tamaño de la bola (ball size).
+        var bx, by;          // Coordenadas de la bola, x y y.
+        var xv, yv;          // Velocidad en x y velocidad en y.
+        var canvas, context; // Canvas y Contexto.
+    
+        // Cargar el canvas y el contexto (load canvas and context)
+         canvas = document.getElementById('game_canvas');
+        context = canvas.getContext('2d');
+        
+        // Setup intervalo (game loop)
+        setInterval(update, 1000/FPS);
+
+        // Bola posicion de inicio
+        bx = canvas.width / 2;  // En la mitad del canvas 
+        by = canvas.height / 2; // In the middle of canvas
+
+        // Velocidad de arranque de la bola aleatoria (between 25 and 100 pps: pixels per second)
+        xv = Math.floor(Math.random() * 76 + 25) / FPS;  //Pixels per frame
+        yv = Math.floor(Math.random() * 76 + 25) / FPS;  //Pixels per frame
+
+
+        //Direccion de la bola aleatoria
+        if (Math.floor(Math.random() * 2 ) == 0) {
+            xv = -xv;
+        }
+        if (Math.floor(Math.random() * 2 ) == 0) {
+            yv = -yv;
+        }
+
+        //Actualizar la funcion
+        function update () {
+            // Move the ball
+            bx += xv;
+            by += yv;
+
+            //bounce the ball on each wall
+            if (bx - bs / 2 < 0 && xv < 0) {
+                xv = -xv;
+            }
+
+            if (bx + bs / 2 > canvas.width && xv > 0) {
+                xv = -xv;
+            }
+
+            if (by - bs / 2 < 0 && yv < 0) {
+                yv = -yv;
+            }
+
+            if (by + bs / 2 > canvas.height && yv > 0) {
+                yv = -yv;
+            }
+
+            //draw background end ball
+            context.fillStyle = "black";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            context.fillStyle = "yellow";
+            context.fillRect(bx - bs / 2 , by - bs / 2, bs, bs);
+        }
+    </script>
+</body>
+</html>
